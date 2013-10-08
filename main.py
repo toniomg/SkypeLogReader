@@ -1,5 +1,9 @@
 import sqlite3
 
+def printCallsList(c):
+    c.execute('SELECT members FROM Calls')
+    print (c.fetchall())
+    
 def printChatList(c):
     """Print the list of Chats stored in DB
         """
@@ -48,25 +52,7 @@ def printMessagesPerUserInChat(ChatSelectedId):
     for name, messagesCount in messagesPerUser:
         print (str(name) + ': ' + str(messagesCount))
         
-
-conn = sqlite3.connect(r'main.db')
-c = conn.cursor()
-
-while 1:
-    
-     mainOptions = ['Conversations', 'Calls']
-        optionSelected = input("Select Option: ")
-        optionSelectedInt = int(optionSelected);
-        print (" ")
-        
-        if optionSelectedInt == 0:
-           #printMessagesInChat(convSelectedId)
-           pass
-        elif optionSelectedInt == 1:
-            conversationMenu()
-     
-     
-    def conversationMenu:
+def conversationMenu():
         #Print the list of Chats:
         chatsList = printChatList(c)
         
@@ -89,14 +75,37 @@ while 1:
         print (" ")
         
         if optionSelectedInt == 0:
-           #printMessagesInChat(convSelectedId)
-           pass
+            #printMessagesInChat(convSelectedId)
+            pass
         elif optionSelectedInt == 1:
             printMessagesPerUserInChat(convSelectedId)
         elif optionSelectedInt == 2:
             pass
         
-        raw_input("Press any key to continue...")
+        input("Press any key to continue...")
+        
+conn = sqlite3.connect(r'main.db')
+c = conn.cursor()
+
+
+if __name__ == '__main__':
+    while 1:
+        
+        mainOptions = ['Conversations', 'Calls']
+        index = 0
+        for option in mainOptions:
+            print (str(index) + ") " + option)
+            index +=1
+        optionSelected = input("Select Option: ")
+        optionSelectedInt = int(optionSelected);
+        print (" ")
+            
+        if optionSelectedInt == 0:
+            conversationMenu()
+        elif optionSelectedInt == 1:
+            printCallsList(c)
+ 
+    
         
 
     
