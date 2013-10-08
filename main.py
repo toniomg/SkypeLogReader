@@ -1,8 +1,13 @@
 import sqlite3
+import datetime
 
 def printCallsList(c):
-    c.execute('SELECT members FROM Calls')
-    print (c.fetchall())
+    c.execute('SELECT dispname, call_duration, start_timestamp FROM CallMembers GROUP BY call_db_id')
+    calls = c.fetchall()
+    for call in calls:
+        duration = 0 if call[1] is None else round(call[1]/60,1)
+        time = 0 if call[2] is None else datetime.datetime.fromtimestamp(call[2])
+        print (call[0] + ": " + str(duration) + " min - " + str(time))
     
 def printChatList(c):
     """Print the list of Chats stored in DB
