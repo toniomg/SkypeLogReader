@@ -9,23 +9,24 @@ def printChatList(c):
     
     index = 0;
     for chat in chatsList:
-        print str(index) + " " + str(chat[0])
+        print (str(index) + " " + str(chat[0]))
         index +=1
         
     return chatsList
-def printMessagesInChat(ChatSelectedId):
+
+def printMessagesInChat(ChatSelectedId):
     """ Print the list of messages from the selected Chat
         """
     
     #Print Messages in Chat selected
     c.execute ('SELECT author, id, body_xml FROM Messages WHERE convo_id=?', [str(ChatSelectedId)])
     messagesList = c.fetchall()
-    print messagesList
+    print (messagesList)
     
     for author, idMessage, message in messagesList:
-        print author
-        print message
-        print ""
+        print (author)
+        print (message)
+        print ("")
         
     return
 
@@ -34,7 +35,7 @@ def printUsersInChat(ChatSelectedId):
     #Get the users of that Chat
     c.execute ('Select identity FROM ChatMembers WHERE chatname= (SELECT identity FROM Chats WHERE id=?)', [ChatSelectedId])
     userList = c.fetchall()
-    print userList
+    print (userList)
     
 def printMessagesPerUserInChat(ChatSelectedId):
     
@@ -45,10 +46,10 @@ def printMessagesPerUserInChat(ChatSelectedId):
      
     print ('Total messages: ' + str(sumM))
     for name, messagesCount in messagesPerUser:
-        print str(name) + ': ' + str(messagesCount)
+        print (str(name) + ': ' + str(messagesCount))
         
 
-conn = sqlite3.connect("C:\Users\Antonio\Desktop\main.db")
+conn = sqlite3.connect(r'main.db')
 c = conn.cursor()
 
 while 1:
@@ -57,22 +58,22 @@ while 1:
     chatsList = printChatList(c)
     
     #Wait for the user to select a Chat
-    convSelected = raw_input("Select Chat: ")
+    convSelected = input("Select Chat: ")
     convSelectedInt = int(convSelected);
     convSelectedName = str(chatsList[convSelectedInt][0])
     convSelectedId = chatsList[convSelectedInt][1]
-    print convSelectedName
+    print (convSelectedName)
     
     #Print the Chat menu
     convOptions = ['Print all messages', 'Get number of messages per user', 'Get most popular words']
     index = 0
     for option in convOptions:
-        print str(index) + ") " + option
+        print (str(index) + ") " + option)
         index +=1
         
-    optionSelected = raw_input("Select Option: ")
+    optionSelected = input("Select Option: ")
     optionSelectedInt = int(optionSelected);
-    print " "
+    print (" ")
     
     if optionSelectedInt == 0:
        #printMessagesInChat(convSelectedId)
