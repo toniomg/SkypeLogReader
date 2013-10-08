@@ -54,36 +54,49 @@ c = conn.cursor()
 
 while 1:
     
-    #Print the list of Chats:
-    chatsList = printChatList(c)
-    
-    #Wait for the user to select a Chat
-    convSelected = input("Select Chat: ")
-    convSelectedInt = int(convSelected);
-    convSelectedName = str(chatsList[convSelectedInt][0])
-    convSelectedId = chatsList[convSelectedInt][1]
-    print (convSelectedName)
-    
-    #Print the Chat menu
-    convOptions = ['Print all messages', 'Get number of messages per user', 'Get most popular words']
-    index = 0
-    for option in convOptions:
-        print (str(index) + ") " + option)
-        index +=1
+     mainOptions = ['Conversations', 'Calls']
+        optionSelected = input("Select Option: ")
+        optionSelectedInt = int(optionSelected);
+        print (" ")
         
-    optionSelected = input("Select Option: ")
-    optionSelectedInt = int(optionSelected);
-    print (" ")
-    
-    if optionSelectedInt == 0:
-       #printMessagesInChat(convSelectedId)
-       pass
-    elif optionSelectedInt == 1:
-        printMessagesPerUserInChat(convSelectedId)
-    elif optionSelectedInt == 2:
-        pass
-    
-    raw_input("Press any key to continue...")
+        if optionSelectedInt == 0:
+           #printMessagesInChat(convSelectedId)
+           pass
+        elif optionSelectedInt == 1:
+            conversationMenu()
+     
+     
+    def conversationMenu:
+        #Print the list of Chats:
+        chatsList = printChatList(c)
+        
+        #Wait for the user to select a Chat
+        convSelected = input("Select Chat: ")
+        convSelectedInt = int(convSelected);
+        convSelectedName = str(chatsList[convSelectedInt][0])
+        convSelectedId = chatsList[convSelectedInt][1]
+        print (convSelectedName)
+        
+        #Print the Chat menu
+        convOptions = ['Print all messages', 'Get number of messages per user', 'Get most popular words']
+        index = 0
+        for option in convOptions:
+            print (str(index) + ") " + option)
+            index +=1
+            
+        optionSelected = input("Select Option: ")
+        optionSelectedInt = int(optionSelected);
+        print (" ")
+        
+        if optionSelectedInt == 0:
+           #printMessagesInChat(convSelectedId)
+           pass
+        elif optionSelectedInt == 1:
+            printMessagesPerUserInChat(convSelectedId)
+        elif optionSelectedInt == 2:
+            pass
+        
+        raw_input("Press any key to continue...")
         
 
     
