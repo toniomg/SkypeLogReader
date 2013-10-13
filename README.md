@@ -7,6 +7,9 @@ Work in progress, returned so far:
 
 1. List of calls with date and conversation time
 2. List of chats:
-  a. Messages in chat
-  b. Count of messages per user
-  c. Count of messages per day of the week with %
+	
+	a.Messages in chat
+
+	b.Count of messages per user
+
+	c.Count of messages per day of the week with %
