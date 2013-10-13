@@ -9,15 +9,15 @@ def getChatList(c):
     """Return the list of chats
         [topic, id]
         """
-    c.execute('SELECT topic, conv_dbid FROM Chats ORDER BY id')
+    c.execute('SELECT displayname, id FROM Conversations ORDER BY id')
     chatsList = c.fetchall();
     return chatsList
 
 def getMessagesInChat(c, ChatSelectedId):
     """ Return the list of messages from the selected Chat:
-        [author, id, body]
+        [author, timestamp, body]
         """
-    c.execute ('SELECT author, id, body_xml FROM Messages WHERE convo_id=?', [str(ChatSelectedId)])
+    c.execute ('SELECT author, timestamp, body_xml FROM Messages WHERE convo_id=?', [str(ChatSelectedId)])
     return c.fetchall()
 
 

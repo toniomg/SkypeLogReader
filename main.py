@@ -4,9 +4,14 @@ import datetime
 import DBQueries
 
         
-def conversationMenu():
+def conversationMenu(c):
         #Print the list of Chats:
-        chatsList = 0 #printChatList(c)
+        chatsList = DBQueries.getChatList(c)
+        index = 0;
+        for title, idChat in chatsList:
+            print (str(index) + " " + str(title.encode('UTF-8') if title else "No name"))
+            index +=1
+        
         
         #Wait for the user to select a Chat
         convSelected = input("Select Chat: ")
@@ -16,7 +21,7 @@ def conversationMenu():
         print (convSelectedName)
         
         #Print the Chat menu
-        convOptions = ['Print all messages', 'Get number of messages per user', 'Get most popular words']
+        convOptions = ['Print all messages', 'Get number of messages per user', 'Print time statistics']
         index = 0
         for option in convOptions:
             print (str(index) + ") " + option)
@@ -27,12 +32,29 @@ def conversationMenu():
         print (" ")
         
         if optionSelectedInt == 0:
-            #printMessagesInChat(convSelectedId)
-            pass
+            messages = DBQueries.getMessagesInChat(c, convSelectedId)
+            print (messages)
         elif optionSelectedInt == 1:
-            pass #printMessagesPerUserInChat(convSelectedId)
+            userMessages = DBQueries.getMessagesPerUserInChat(c, convSelectedId)
+            print("Total messages: " + str(sum(userMessages[i][1] for i in range(len(userMessages)))))
+            for author, msgCount in userMessages:
+                print (author + " " + str(msgCount))
         elif optionSelectedInt == 2:
-            pass
+            messages = DBQueries.getMessagesInChat(c, convSelectedId)
+            daysOfWeekCount = [0]*7
+            for author, timestamp, body in messages:
+                msgDate = datetime.date.fromtimestamp(timestamp)
+                daysOfWeekCount[msgDate.weekday()] += 1
+            print("Monday Count: " + str(daysOfWeekCount[0]) + " (" + str(round(daysOfWeekCount[0]/len(messages)*100,1)) +  "%)")
+            print("Tuesday Count: " + str(daysOfWeekCount[1]) + " (" + str(round(daysOfWeekCount[1]/len(messages)*100,1)) +  "%)")
+            print("Wednesday Count: " + str(daysOfWeekCount[2])+ " (" + str(round(daysOfWeekCount[2]/len(messages)*100,1)) +  "%)")
+            print("Thursday Count: " + str(daysOfWeekCount[3])+ " (" + str(round(daysOfWeekCount[3]/len(messages)*100,1)) +  "%)")
+            print("Friday Count: " + str(daysOfWeekCount[4])+ " (" + str(round(daysOfWeekCount[4]/len(messages)*100,1)) +  "%)")
+            print("Saturday Count: " + str(daysOfWeekCount[5])+ " (" + str(round(daysOfWeekCount[5]/len(messages)*100,1)) +  "%)")
+            print("Sunday Count:" + str(daysOfWeekCount[6])+ " (" + str(round(daysOfWeekCount[6]/len(messages)*100,1)) +  "%)")
+                
+            
+            
         
         input("Press any key to continue...")
         
@@ -71,11 +93,10 @@ if __name__ == '__main__':
     c = conn.cursor()
     
     while 1:
-        
         mainOptions = ['Conversations', 'Calls']
         optionSelected = printMenuAndWaitResponse(mainOptions)
         if optionSelected == 0:
-            conversationMenu()
+            conversationMenu(c)
         elif optionSelected == 1:
             printCallsList(c)
  
