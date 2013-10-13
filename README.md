@@ -3,7 +3,7 @@ Skype Log Reader
 
 Python Script to analyze Skype conversations stored by default in a sqlite DB.
 
-Work in progress, returned so far:
+Work in progress, done so far:
 
 1. List of calls with date and conversation time
 2. List of chats:
@@ -13,3 +13,7 @@ Work in progress, returned so far:
 	b.Count of messages per user
 
 	c.Count of messages per day of the week with %
+	
+	
+
+Feel free to contribute
