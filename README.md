@@ -1,8 +1,19 @@
 Skype Log Reader
 ==============
 
-Python Script to analyze conversations stored by Skype in a sqlite Database.
+Python Script to analyze Skype conversations stored by default in a sqlite DB.
 
-It returns statistics as message per user in a conversation, call time per contacts, etc...
+Work in progress, done so far:
 
-Work in progress
+1. List of calls with date and conversation time
+2. List of chats:
+	
+	a.Messages in chat
+
+	b.Count of messages per user
+
+	c.Count of messages per day of the week with %
+	
+	
+
+Feel free to contribute
