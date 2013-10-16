@@ -3,10 +3,11 @@ import datetime
 
 import DBQueries
 
-        
+minMessagesToDisplayConversation = 100
+  
 def conversationMenu(c):
         #Print the list of Chats:
-        chatsList = DBQueries.getChatList(c)
+        chatsList = DBQueries.getChatList(c, minMessagesToDisplayConversation)
         index = 0;
         for title, idChat in chatsList:
             print (str(index) + " " + str(title.encode('UTF-8') if title else "No name"))
@@ -21,7 +22,7 @@ def conversationMenu(c):
         print (convSelectedName)
         
         #Print the Chat menu
-        convOptions = ['Print all messages', 'Get number of messages per user', 'Print time statistics']
+        convOptions = ['Print all messages', 'Statistics']
         index = 0
         for option in convOptions:
             print (str(index) + ") " + option)
@@ -35,24 +36,35 @@ def conversationMenu(c):
             messages = DBQueries.getMessagesInChat(c, convSelectedId)
             print (messages)
         elif optionSelectedInt == 1:
+            
+            firstLastMsg = DBQueries.getFirstAndLastMessageInChat(c, convSelectedId)
+            print ("First msg: " + datetime.date.fromtimestamp(firstLastMsg[0]).strftime('%d/%b/%Y'))
+            print ("Last msg: " + datetime.date.fromtimestamp(firstLastMsg[1]).strftime('%d/%b/%Y'))
+            print ("")
+            
             userMessages = DBQueries.getMessagesPerUserInChat(c, convSelectedId)
-            print("Total messages: " + str(sum(userMessages[i][1] for i in range(len(userMessages)))))
+            msgsTotal = sum(userMessages[i][1] for i in range(len(userMessages)))
+            print("Total messages: " + str(msgsTotal))
+            print("") 
             for author, msgCount in userMessages:
-                print (author + " " + str(msgCount))
-        elif optionSelectedInt == 2:
+                print (author + ": " + str(msgCount) + " (" + str(round(msgCount/msgsTotal*100,1)) +  "%)")
+            
             messages = DBQueries.getMessagesInChat(c, convSelectedId)
             daysOfWeekCount = [0]*7
+            
             for author, timestamp, body in messages:
                 msgDate = datetime.date.fromtimestamp(timestamp)
                 daysOfWeekCount[msgDate.weekday()] += 1
-            print("Monday Count: " + str(daysOfWeekCount[0]) + " (" + str(round(daysOfWeekCount[0]/len(messages)*100,1)) +  "%)")
-            print("Tuesday Count: " + str(daysOfWeekCount[1]) + " (" + str(round(daysOfWeekCount[1]/len(messages)*100,1)) +  "%)")
-            print("Wednesday Count: " + str(daysOfWeekCount[2])+ " (" + str(round(daysOfWeekCount[2]/len(messages)*100,1)) +  "%)")
-            print("Thursday Count: " + str(daysOfWeekCount[3])+ " (" + str(round(daysOfWeekCount[3]/len(messages)*100,1)) +  "%)")
-            print("Friday Count: " + str(daysOfWeekCount[4])+ " (" + str(round(daysOfWeekCount[4]/len(messages)*100,1)) +  "%)")
-            print("Saturday Count: " + str(daysOfWeekCount[5])+ " (" + str(round(daysOfWeekCount[5]/len(messages)*100,1)) +  "%)")
-            print("Sunday Count:" + str(daysOfWeekCount[6])+ " (" + str(round(daysOfWeekCount[6]/len(messages)*100,1)) +  "%)")
-                
+            
+            print("") 
+            print("Monday: " + str(daysOfWeekCount[0]) + " (" + str(round(daysOfWeekCount[0]/len(messages)*100,1)) +  "%)")
+            print("Tuesday: " + str(daysOfWeekCount[1]) + " (" + str(round(daysOfWeekCount[1]/len(messages)*100,1)) +  "%)")
+            print("Wednesday: " + str(daysOfWeekCount[2])+ " (" + str(round(daysOfWeekCount[2]/len(messages)*100,1)) +  "%)")
+            print("Thursday: " + str(daysOfWeekCount[3])+ " (" + str(round(daysOfWeekCount[3]/len(messages)*100,1)) +  "%)")
+            print("Friday: " + str(daysOfWeekCount[4])+ " (" + str(round(daysOfWeekCount[4]/len(messages)*100,1)) +  "%)")
+            print("Saturday: " + str(daysOfWeekCount[5])+ " (" + str(round(daysOfWeekCount[5]/len(messages)*100,1)) +  "%)")
+            print("Sunday: " + str(daysOfWeekCount[6])+ " (" + str(round(daysOfWeekCount[6]/len(messages)*100,1)) +  "%)")
+            print ("")
             
             
         
@@ -93,7 +105,7 @@ if __name__ == '__main__':
     c = conn.cursor()
     
     while 1:
-        mainOptions = ['Conversations', 'Calls']
+        mainOptions = ['Conversations (min ' + str(minMessagesToDisplayConversation) + ' messages)', 'Calls']
         optionSelected = printMenuAndWaitResponse(mainOptions)
         if optionSelected == 0:
             conversationMenu(c)
